@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- <properties resource="generatorConfig.properties" /> -->
+
+    <!-- 生成工商调解dal配置 -->
+    <context id="laki" targetRuntime="MyBatis3">
+        <property name="suppressAllComments" value="true"/>
+        <property name="useActualColumnNames" value="false"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 配置插件 -->
+        <plugin type="com.chengzhi.mybaits.code_gen.plugin.dal.mybatis.generator.MultiDbPaginationPlugin">
+            <property name="basePackage" value="${basePackage}"/>
+            <property name="basePath" value="${basePath}/main/java"/>
+            <property name="doPackage" value="${doSubPackage}.dal.entity"/>
+            <property name="dtoPackage" value="${doSubPackage}.dal.dto"/>
+            <property name="boPackage" value="${doSubPackage}.bo"/>
+        </plugin>
+        <plugin type="com.chengzhi.mybaits.code_gen.plugin.dal.mybatis.generator.BoPlugin">
+            <property name="basePackage" value="${basePackage}"/>
+            <property name="basePath" value="${basePath}/main/java"/>
+            <property name="doPackage" value="${doSubPackage}.dal.entity"/>
+            <property name="dtoPackage" value="${doSubPackage}.dal.dto"/>
+            <property name="boPackage" value="${doSubPackage}.bo"/>
+        </plugin>
+
+        <!-- 配置数据库连接 -->
+        <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${jdbc.url}" userId="${jdbc.user}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成文件位置 -->
+        <javaModelGenerator targetPackage="${doSubPackage}.dal.entity" targetProject="${basePath}/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="${doSubPackage}.dal.mapper" targetProject="${basePath}/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${doSubPackage}.dal.mapper"
+                             targetProject="${basePath}/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        ${tables_inputs}
+    </context>
+</generatorConfiguration>
