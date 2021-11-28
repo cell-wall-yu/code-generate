@@ -1,4 +1,4 @@
-package com.chengzhi.mybaits.code_gen.utils;
+package com.chengzhi.utils;
 
 import java.util.ArrayList;
 import java.util.List;

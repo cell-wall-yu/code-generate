@@ -1,6 +1,6 @@
 package com.chengzhi.mybaits.code_gen.plugin;
 
-import com.chengzhi.mybaits.code_gen.utils.SecurityIDUtil;
+import com.chengzhi.utils.SecurityIDUtil;
 
 import java.util.Date;
 

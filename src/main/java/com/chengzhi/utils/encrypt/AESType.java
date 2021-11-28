@@ -1,4 +1,4 @@
-package com.chengzhi.mybaits.code_gen.encrypt;
+package com.chengzhi.utils.encrypt;
 
 public enum AESType {
 

@@ -1,7 +1,7 @@
 package com.chengzhi.mybaits.code_gen;
 
 import com.chengzhi.mybaits.code_gen.plugin.MyBatisGenerator;
-import com.chengzhi.mybaits.code_gen.utils.CommonUtil;
+import com.chengzhi.utils.CommonUtil;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -94,7 +94,7 @@ public class MybatisGenBean {
             for (String string : tmps) {
                 String tmpName = string.trim();
 
-                String objectName = CommonUtil.convertDBField2Jave(tmpName.substring(tmpName.indexOf("_") + 1));
+                String objectName = CommonUtil.convertDBField2Java(tmpName.substring(tmpName.indexOf("_") + 1));
 
                 objectName = objectName.substring(0, 1).toUpperCase() + objectName.substring(1);
 

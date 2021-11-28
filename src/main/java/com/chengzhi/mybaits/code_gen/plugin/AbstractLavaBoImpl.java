@@ -3,6 +3,7 @@ package com.chengzhi.mybaits.code_gen.plugin;
 
 import com.chengzhi.mybaits.code_gen.plugin.exception.LavaException;
 import com.chengzhi.mybaits.code_gen.plugin.theaduser.ThreadUserGetter;
+import com.chengzhi.page.PageList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,11 +136,31 @@ public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M 
     }
 
     protected List<T> convertToDtoList(List<? extends D> list) {
-        ArrayList<T> result = new ArrayList<T>(list.size());
-        for (D item : list) {
-            result.add(convertToDto(item));
+
+        if (list instanceof PageList) {
+            PageList<?> pageList = (PageList<?>) list;
+
+            PageList<T> result = new PageList<T>(list.size());
+            result.setCurrentPage(pageList.getCurrentPage());
+            result.setHasNext(pageList.getHasNext());
+            result.setHasPre(pageList.getHasPre());
+            result.setPageSize(pageList.getPageSize());
+            result.setTotalPage(pageList.getTotalPage());
+            result.setTotalSize(pageList.getTotalSize());
+
+            for (D item : list) {
+                result.add(convertToDto(item));
+            }
+            return result;
         }
-        return result;
+        else {
+            ArrayList<T> result = new ArrayList<T>(list.size());
+
+            for (D item : list) {
+                result.add(convertToDto(item));
+            }
+            return result;
+        }
     }
 
     protected abstract Class<? extends D> getDoClass();

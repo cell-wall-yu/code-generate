@@ -1,4 +1,4 @@
-package com.chengzhi.mybaits.code_gen.encrypt;
+package com.chengzhi.utils.encrypt;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

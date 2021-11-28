@@ -1,4 +1,4 @@
-package com.chengzhi.mybaits.code_gen.utils;
+package com.chengzhi.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.ObjectUtils;

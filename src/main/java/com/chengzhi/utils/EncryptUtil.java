@@ -1,7 +1,7 @@
-package com.chengzhi.mybaits.code_gen.utils;
+package com.chengzhi.utils;
 
 
-import com.chengzhi.mybaits.code_gen.encrypt.BackAES;
+import com.chengzhi.utils.encrypt.BackAES;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
