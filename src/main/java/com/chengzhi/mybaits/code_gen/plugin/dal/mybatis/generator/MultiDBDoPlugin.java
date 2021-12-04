@@ -17,9 +17,9 @@ import java.io.File;
 import java.util.*;
 
 /**
- * 支持一份mapper支持多数据源的插件
+ * 支持一份mapper支持多数据源的插件，生成do对象以及**Example.java
  */
-public class MultiDbPaginationPlugin extends PluginAdapter {
+public class MultiDBDoPlugin extends PluginAdapter {
 
     public final static String PROPERTY_EXTEND = "extend";
 
@@ -28,7 +28,7 @@ public class MultiDbPaginationPlugin extends PluginAdapter {
     protected static FullyQualifiedJavaType tableType = new FullyQualifiedJavaType(Table.class.getName());
 
     protected static String MAPPER_XML_FILE_POSTFIX = "Ext";
-    protected static String MAPPER_JAVA_FILE_POTFIX = "Ext";
+    protected static String MAPPER_JAVA_FILE_POSTFIX = "Ext";
     protected static String SQLMAP_COMMON_POSTFIX = "and is_deleted = 'n'";
     protected static String ANNOTATION_RESOURCE = "javax.annotation.Resource";
 
@@ -374,7 +374,7 @@ public class MultiDbPaginationPlugin extends PluginAdapter {
             }
         }
         parentElement.getAttributes().remove(namespaceAttribute);
-        parentElement.getAttributes().add(new Attribute("namespace", introspectedTable.getMyBatis3JavaMapperType() + MAPPER_JAVA_FILE_POTFIX));
+        parentElement.getAttributes().add(new Attribute("namespace", introspectedTable.getMyBatis3JavaMapperType() + MAPPER_JAVA_FILE_POSTFIX));
     }
 
     protected void moveDocumentInsertSql(XmlElement parentElement) {
@@ -908,7 +908,7 @@ public class MultiDbPaginationPlugin extends PluginAdapter {
     }
 
     protected GeneratedJavaFile generateMapperExtJava(IntrospectedTable introspectedTable) {
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType() + MAPPER_JAVA_FILE_POTFIX);
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType() + MAPPER_JAVA_FILE_POSTFIX);
         Interface interfaze = new Interface(type);
         interfaze.setVisibility(JavaVisibility.PUBLIC);
         context.getCommentGenerator().addJavaFileComment(interfaze);
@@ -1052,7 +1052,7 @@ public class MultiDbPaginationPlugin extends PluginAdapter {
     }
 
     public static void main(String[] args) {
-        String config = MultiDbPaginationPlugin.class.getClassLoader().getResource("generatorConfig_old.xml").getFile();
+        String config = MultiDBDoPlugin.class.getClassLoader().getResource("generatorConfig_old.xml").getFile();
         String[] arg = {"-configfile", config, "-overwrite"};
         ShellRunner.main(arg);
     }

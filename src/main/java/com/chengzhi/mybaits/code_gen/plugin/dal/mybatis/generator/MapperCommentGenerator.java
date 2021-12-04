@@ -13,6 +13,9 @@ import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Properties;
 
+/**
+ * 一些公共的方法生成
+ */
 public class MapperCommentGenerator implements CommentGenerator {
     // 开始的分隔符，例如mysql为`，sqlserver为[
     private String beginningDelimiter = "";

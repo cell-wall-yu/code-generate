@@ -12,7 +12,7 @@
         <property name="javaFileEncoding" value="UTF-8"/>
 
         <!-- 配置插件 -->
-        <plugin type="com.chengzhi.mybaits.code_gen.plugin.dal.mybatis.generator.MultiDbPaginationPlugin">
+        <plugin type="com.chengzhi.mybaits.code_gen.plugin.dal.mybatis.generator.MultiDBDoPlugin">
             <property name="basePackage" value="${basePackage}"/>
             <property name="basePath" value="${basePath}/main/java"/>
             <property name="doPackage" value="${doSubPackage}.dal.entity"/>
@@ -25,6 +25,7 @@
             <property name="doPackage" value="${doSubPackage}.dal.entity"/>
             <property name="dtoPackage" value="${doSubPackage}.dal.dto"/>
             <property name="boPackage" value="${doSubPackage}.bo"/>
+            <property name="mapStructPackage" value="${doSubPackage}.mapstruct"/>
         </plugin>
 
         <!-- 配置数据库连接 -->

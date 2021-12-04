@@ -1,15 +1,15 @@
 package com.chengzhi.mybaits.code_gen.plugin;
 
-import com.chengzhi.mybaits.code_gen.plugin.tran.TransSupport;
+
+import java.io.Serializable;
 
 /**
  * 基类<br>
  * 万事之祖，万事皆允，万事皆虚。
- *
  */
-public abstract class LavaBaseModel implements TransSupport {
+public abstract class LavaBaseModel implements Serializable {
 
-     private static final long serialVersionUID = -6019275603702011190L;
+    private static final long serialVersionUID = -6019275603702011190L;
 
     /**
      * 主键，所有模型都需要的唯一标识

@@ -11,8 +11,10 @@ public class GeneratorUtil {
     public final static String PROPERTY_BASE_PACKAGE = "basePackage";
     public final static String PROPERTY_BO_PACKAGE = "boPackage";
     public final static String PROPERTY_DTO_PACKAGE = "dtoPackage";
+    public final static String PROPERTY_MAPSTRUCT_PACKAGE = "mapStructPackage";
 
     public static String EXT_POSTFIX = "Ext";
+    public static String MAPSTRUCT_POSTFIX = "MapStruct";
 
     public static String SCENARIO = "Scenario";
     public static String DTO_POSTFIX = "DTO";
@@ -74,6 +76,21 @@ public class GeneratorUtil {
                     + BO_POSTFIX;
         } else {
             return boPackage + SPOT + getShortClassName(getDoName(introspectedTable)).replace("DO", "") + BO_POSTFIX;
+        }
+    }
+
+    /**
+     * 获取mapstruct名称
+     * @param boPackage
+     * @param introspectedTable
+     * @return
+     */
+    public static String getMapStructName(String boPackage, IntrospectedTable introspectedTable) {
+        if (isMasterEntity(introspectedTable)) {
+            return boPackage + SPOT + getShortClassName(getDoName(introspectedTable)).replace("DO", "") + SCENARIO
+                    + MAPSTRUCT_POSTFIX;
+        } else {
+            return boPackage + SPOT + getShortClassName(getDoName(introspectedTable)).replace("DO", "") + MAPSTRUCT_POSTFIX;
         }
     }
 

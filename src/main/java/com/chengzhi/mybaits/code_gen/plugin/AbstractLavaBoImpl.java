@@ -3,7 +3,6 @@ package com.chengzhi.mybaits.code_gen.plugin;
 
 import com.chengzhi.mybaits.code_gen.plugin.exception.LavaException;
 import com.chengzhi.mybaits.code_gen.plugin.theaduser.ThreadUserGetter;
-import com.chengzhi.page.PageList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +16,19 @@ import java.util.*;
  * @param <M> 业务数据操作Mapper
  * @param <E> 业务数据操作Example
  */
-public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M extends LavaMapper<D, E>, E extends LavaExample> implements LavaBo<D, T, E> {
+public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M extends LavaMapper<D, E>, E extends LavaExample, S extends LavaMapStruct<D, T>> implements LavaBo<D, T, E> {
 
     protected M mapper;
+    protected S mapperStruct;
 
     protected Logger logger = LoggerFactory.getLogger(AbstractLavaBoImpl.class);
 
     public void setMapper(M mapper) {
         this.mapper = mapper;
+    }
+
+    public void setMapperStruct(S mapperStruct) {
+        this.mapperStruct = mapperStruct;
     }
 
 
@@ -46,7 +50,7 @@ public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M 
     }
 
     public void insert(T dataObject) {
-        D saveObject = dataObject.trans(getDoClass());
+        D saveObject = mapperStruct.convertToDo(dataObject);
         long v;
         if (isValidDo(saveObject)) {
             String operator = getOperator();
@@ -78,9 +82,9 @@ public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M 
     }
 
     protected int deleteByExample(E example) {
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("example", example);
-        Map<String, Object> record = new HashMap<String, Object>();
+        Map<String, Object> record = new HashMap<>();
         record.put("gmtModified", new Date(System.currentTimeMillis()));
         record.put("modifier", getOperator());
         record.put("isDeleted", "y");
@@ -99,12 +103,12 @@ public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M 
     @Override
     public T selectByPrimaryKey(Long id) {
         D data = mapper.selectByPrimaryKey(id);
-        return convertToDto(data);
+        return mapperStruct.convertToDto(data);
     }
 
     @Override
     public int update(T dataObject) {
-        D saveObject = dataObject.trans(getDoClass());
+        D saveObject = mapperStruct.convertToDo(dataObject);
         int v;
         if (isValidDo(saveObject)) {
             saveObject.setGmtModified(new Date(System.currentTimeMillis()));
@@ -126,41 +130,6 @@ public abstract class AbstractLavaBoImpl<D extends LavaDo, T extends LavaDto, M 
 
     public boolean isValidDo(D dataObject) {
         return true;
-    }
-
-    protected T convertToDto(D data) {
-        if (data == null) {
-            return null;
-        }
-        return data.trans(getDtoClass());
-    }
-
-    protected List<T> convertToDtoList(List<? extends D> list) {
-
-        if (list instanceof PageList) {
-            PageList<?> pageList = (PageList<?>) list;
-
-            PageList<T> result = new PageList<T>(list.size());
-            result.setCurrentPage(pageList.getCurrentPage());
-            result.setHasNext(pageList.getHasNext());
-            result.setHasPre(pageList.getHasPre());
-            result.setPageSize(pageList.getPageSize());
-            result.setTotalPage(pageList.getTotalPage());
-            result.setTotalSize(pageList.getTotalSize());
-
-            for (D item : list) {
-                result.add(convertToDto(item));
-            }
-            return result;
-        }
-        else {
-            ArrayList<T> result = new ArrayList<T>(list.size());
-
-            for (D item : list) {
-                result.add(convertToDto(item));
-            }
-            return result;
-        }
     }
 
     protected abstract Class<? extends D> getDoClass();
