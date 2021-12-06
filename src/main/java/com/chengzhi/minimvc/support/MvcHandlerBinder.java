@@ -1,8 +1,10 @@
 package com.chengzhi.minimvc.support;
 
+import com.chengzhi.minimvc.converters.*;
 import org.springframework.boot.autoconfigure.validation.ValidatorAdapter;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.support.FormattingConversionServiceFactoryBean;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Administrator
@@ -21,6 +26,7 @@ import java.lang.annotation.Annotation;
 public class MvcHandlerBinder {
 
     private ServletRequestDataBinder binder;
+    private FormattingConversionServiceFactoryBean conversionServiceBean;
 
     protected WebDataBinder createBinder(Object target, String objectName) throws Exception {
         if (null == binder) {
@@ -29,9 +35,26 @@ public class MvcHandlerBinder {
         return binder;
     }
 
+    private Set dealConversion() {
+        Set<Converter> converters = new HashSet<>();
+        converters.add(new String2BigDecimalConverter());
+        converters.add(new String2DoubleConverter());
+        converters.add(new String2IntegerConverter());
+        converters.add(new String2LongConverter());
+        converters.add(new String2NumberConverter());
+        String2DateConverter string2DateConverter = new String2DateConverter();
+        string2DateConverter.setFormats(Arrays.asList("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", "yyyy/MM/dd"));
+        string2DateConverter.init();
+        converters.add(string2DateConverter);
+        return converters;
+    }
+
     protected void initBinder() throws Exception {
         // 绑定类型转换配置类
-        FormattingConversionServiceFactoryBean conversionServiceBean = SpringContextUtil.getContext().getBean(FormattingConversionServiceFactoryBean.class);
+        if (null == conversionServiceBean) {
+            conversionServiceBean = SpringContextUtil.getContext().getAutowireCapableBeanFactory().createBean(FormattingConversionServiceFactoryBean.class);
+            conversionServiceBean.setConverters(dealConversion());
+        }
         if (null != conversionServiceBean) {
             binder.setConversionService(conversionServiceBean.getObject());
         }
@@ -45,7 +68,6 @@ public class MvcHandlerBinder {
             binder.setValidator(springValidatorAdapter);
         }
     }
-
 
 
     /**
