@@ -1,6 +1,7 @@
 package com.chengzhi.mybaits.code_gen.plugin;
 
 import com.chengzhi.page.PageList;
+import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
  */
 public interface LavaMapStruct<E, T> {
 
+    @Mapping(target = "gmtCreate", source = "gmtCreate", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Mapping(target = "gmtModified", source = "gmtModified", dateFormat = "yyyy-MM-dd HH:mm:ss")
     T convertToDto(E entity);
 
     E convertToDo(T dto);

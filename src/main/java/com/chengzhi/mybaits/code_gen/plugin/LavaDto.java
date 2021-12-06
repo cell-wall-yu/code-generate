@@ -8,11 +8,11 @@ public abstract class LavaDto extends LavaBaseModel {
 
     private String securityId;
 
-    private Date gmtCreate;
+    private String gmtCreate;
 
     private String creator;
 
-    private Date gmtModified;
+    private String gmtModified;
 
     private String modifier;
 
@@ -30,19 +30,19 @@ public abstract class LavaDto extends LavaBaseModel {
         this.securityId = securityId;
     }
 
-    public Date getGmtCreate() {
+    public String getGmtCreate() {
         return gmtCreate;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
+    public void setGmtCreate(String gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
 
-    public Date getGmtModified() {
+    public String getGmtModified() {
         return gmtModified;
     }
 
-    public void setGmtModified(Date gmtModified) {
+    public void setGmtModified(String gmtModified) {
         this.gmtModified = gmtModified;
     }
 
