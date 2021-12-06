@@ -4,6 +4,8 @@ import com.chengzhi.load.ClassHelper;
 import com.chengzhi.utils.MimeTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.HttpServletBean;
 
 import javax.servlet.ServletException;
@@ -19,6 +21,8 @@ import java.io.InputStream;
  * @date 2021/11/22 0022下午 2:47
  */
 public abstract class FrameworkServlet extends HttpServletBean {
+    protected static ApplicationContext applicationContext;
+    protected static boolean applicationContextInjected;
     private static Logger log = LoggerFactory.getLogger(FrameworkServlet.class);
 
     @Override
@@ -43,6 +47,15 @@ public abstract class FrameworkServlet extends HttpServletBean {
 
     protected abstract void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 
+    @Override
+    protected void initServletBean() throws ServletException {
+        log.info("FrameworkServlet FrameworkServlet");
+    }
+
+    public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        FrameworkServlet.applicationContextInjected = true;
+        FrameworkServlet.applicationContext = applicationContext;
+    }
 
     protected final void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI().substring(request.getContextPath().length());

@@ -2,6 +2,7 @@ package com.chengzhi.mybaits.code_gen;
 
 import com.chengzhi.mybaits.code_gen.plugin.MyBatisGenerator;
 import com.chengzhi.utils.CommonUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -43,6 +44,15 @@ public class MybatisGenBean {
         String propertiesFilePath = xmlPath.substring(0, xmlPath.lastIndexOf(".")) + ".properties";
         properties.load(new InputStreamReader(new FileInputStream(propertiesFilePath), "utf-8"));
         doSubPackage = properties.getProperty("basePackage") + ".module." + properties.getProperty("moduleName");
+        if (StringUtils.isEmpty(properties.getProperty("basePackage"))) {
+            throw new RuntimeException("basePackage is null");
+        }
+        if (StringUtils.isEmpty(properties.getProperty("moduleName"))) {
+            throw new RuntimeException("moduleName is null");
+        }
+        if (StringUtils.isEmpty(properties.getProperty("tableNames"))) {
+            throw new RuntimeException("tableNames is null");
+        }
         properties.put("doSubPackage", doSubPackage);
         properties.put("basePath", basePath);
         doScan(xmlPath);

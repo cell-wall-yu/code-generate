@@ -3,7 +3,6 @@ package com.chengzhi.minimvc.support;
 import com.chengzhi.exception.BizException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.ServletException;
@@ -38,11 +37,6 @@ public class MiniMvcServletFast extends FrameworkServlet {
     private static final String N = "\n";
 
     /**
-     * 上下文
-     */
-    private static ApplicationContext applicationContext;
-
-    /**
      * 拦截器
      */
     private List<HandlerInterceptor> interceptors;
@@ -51,11 +45,6 @@ public class MiniMvcServletFast extends FrameworkServlet {
      * rpc接口扫描器
      */
     private MvcUriMapperHandler mvcUriMapperHandler;
-
-    /**
-     * rpc扫描包根路径
-     */
-    private static String webBasePackage;
 
     /**
      * mvcRenderViewResolver
@@ -72,16 +61,6 @@ public class MiniMvcServletFast extends FrameworkServlet {
     private static String contextPath;
 
     private static AtomicBoolean hasInit = new AtomicBoolean(false);
-
-    public static void setWebBasePackage(String webBasePackage) {
-        MiniMvcServletFast.webBasePackage = webBasePackage;
-    }
-
-
-    public static void setApplicationContext(ApplicationContext applicationContext) {
-        MiniMvcServletFast.applicationContext = applicationContext;
-        SpringContextUtil.setContext(applicationContext);
-    }
 
     public MiniMvcServletFast() {
         this.initCfg();
@@ -190,11 +169,10 @@ public class MiniMvcServletFast extends FrameworkServlet {
         if (!hasInit.compareAndSet(false, true)) {
             return;
         }
-        // 初始化 uri handler映射
-        if (webBasePackage != null) {
-            webBasePackage = webBasePackage.trim();
+        if (applicationContextInjected) {
+            SpringContextUtil.setContext(applicationContext);
         } else {
-            throw new RuntimeException("[miniMvcServletFast] webBasePackage is null");
+            log.error("[miniMvcServletFast] Injected applicationContext fail");
         }
         if (null == mvcRenderViewResolver) {
             mvcUriMapperHandler = applicationContext.getAutowireCapableBeanFactory().createBean(MvcUriMapperHandler.class);
@@ -203,7 +181,6 @@ public class MiniMvcServletFast extends FrameworkServlet {
         if (contextPath != null) {
             mvcUriMapperHandler.setContextPath(contextPath);
         }
-        mvcUriMapperHandler.setRootPackage(webBasePackage);
         mvcUriMapperHandler.detectHandlerByServlet();
 
         if (null == mvcRenderViewResolver) {

@@ -21,8 +21,15 @@ import java.util.TreeMap;
  * @date 2021/11/9 0009下午 4:19
  */
 public class MvcUriMapperHandler {
+    private final static String URI_RULE = "\\S+\\.module\\.+\\S+\\.web\\.rpc\\.\\S+";
+
+    private final static String MODULE = "module";
+
     private static Logger log = LoggerFactory.getLogger(MvcUriMapperHandler.class);
 
+    public static void main(String[] args) {
+        System.out.println("com.yu.asdfaadsf.asdfadsf.sadfasdf.module.user.web.rpc.UserController".matches(URI_RULE));
+    }
     public class MvcUriMethod {
         private String uri;
         private Object handleObject;
@@ -64,7 +71,6 @@ public class MvcUriMapperHandler {
 
     }
 
-    private String rootPackage;
     private final String jsonSuffix = ".json";
     /**
      * 存放uri对应的MvcUriMethod对象
@@ -95,15 +101,15 @@ public class MvcUriMapperHandler {
         Object bean = context.getBean(beanName);
         String clsName = cls.getName();
         // 判断bean是否包含rootPackage
-        if (!clsName.startsWith(rootPackage)) {
+        if (!clsName.contains(MODULE)) {
             return;
         }
         // 判断bean是否包含符合 *.web.rpc.* 规则
-        if (!clsName.matches(rootPackage + ".\\S+.web.rpc.\\S+")) {
+        if (!clsName.matches(URI_RULE)) {
             return;
         }
         // com.yu.module.moduleName.web.rpc.UserRPC.java
-        int sp1 = rootPackage.length() + 1;
+        int sp1 = clsName.indexOf(MODULE) + MODULE.length() + 1;
         int sp2 = clsName.indexOf(".", sp1 + 1);
         int sp3 = clsName.indexOf(".", sp2 + 1);
         String moduleName = clsName.substring(sp1, sp2);
@@ -171,10 +177,6 @@ public class MvcUriMapperHandler {
 
     public Map<String, MvcUriMethod> getUriMap() {
         return uriMap;
-    }
-
-    public void setRootPackage(String webBasePackage) {
-        this.rootPackage = webBasePackage;
     }
 
     private String contextPath;
