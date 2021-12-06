@@ -81,10 +81,11 @@ public class BoPlugin extends PluginAdapter {
         context.getCommentGenerator().addJavaFileComment(boInterface);
 
         // 建立mapstruct接口
-        FullyQualifiedJavaType mapStructType = new FullyQualifiedJavaType(mapStructName);
-        Interface mapInterface = new Interface(mapStructType);
+        Interface mapInterface = new Interface(mapStructName);
         mapInterface.setVisibility(JavaVisibility.PUBLIC);
-        context.getCommentGenerator().addJavaFileComment(mapInterface);
+        mapInterface.addAnnotation("@Mapper(componentModel = \"spring\",unmappedTargetPolicy = ReportingPolicy.IGNORE)");
+        mapInterface.addImportedType(new FullyQualifiedJavaType(Mapper.class.getName()));
+        mapInterface.addImportedType(new FullyQualifiedJavaType(ReportingPolicy.class.getName()));
 
         // 继承StateBo或LavaBo
         String doShortName = GeneratorUtil.getShortClassName(doName);
@@ -98,12 +99,6 @@ public class BoPlugin extends PluginAdapter {
 
         mapInterface.addImportedType(importedTypeMap);
         mapInterface.addSuperInterface(mapstructInterface);
-
-        TopLevelClass mapClass = new TopLevelClass(mapStructType);
-        mapClass.addAnnotation("@Mapper(componentModel = \"spring\",unmappedTargetPolicy = ReportingPolicy.IGNORE)");
-        mapClass.addImportedType(new FullyQualifiedJavaType(Mapper.class.getName()));
-        mapClass.addImportedType(new FullyQualifiedJavaType(ReportingPolicy.class.getName()));
-        mapClass.setVisibility(JavaVisibility.PUBLIC);
 
         supperInterface = new FullyQualifiedJavaType(GeneratorUtil.getShortClassName(LavaBo.class.getName()) + "<" + doShortName + "," + dtoShortName + "," + exmpShortName + ">");
         importInterface = new FullyQualifiedJavaType(LavaBo.class.getName() + "<" + doName + "," + dtoName + "," + exmpName + ">");
