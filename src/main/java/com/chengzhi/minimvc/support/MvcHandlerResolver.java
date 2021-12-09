@@ -87,17 +87,17 @@ public class MvcHandlerResolver {
                 Object out = MvcRequestParamResolver.resolveRequestParam(methodParam, request);
                 if (null == mvcHandlerBinder) {
                     mvcHandlerBinder = new MvcHandlerBinder();
-                    binder = mvcHandlerBinder.createBinder(out, null);
-                    mvcHandlerBinder.initBinder();
                 }
+                binder = mvcHandlerBinder.createBinder(out, null);
+                mvcHandlerBinder.initBinder();
                 args[i] = binder.convertIfNecessary(out, methodParam.getParameterType());
             } else if (isAttr) {
                 args[i] = MvcRequestParamResolver.resolveModelAttribute(methodParam, request);
                 if (null == mvcHandlerBinder) {
                     mvcHandlerBinder = new MvcHandlerBinder();
-                    binder = mvcHandlerBinder.createBinder(args[i], methodParam.getParameterName());
-                    mvcHandlerBinder.initBinder();
                 }
+                binder = mvcHandlerBinder.createBinder(args[i], methodParam.getParameterName());
+                mvcHandlerBinder.initBinder();
                 if (null != args[i]) {
                     mvcHandlerBinder.validateIfApplicable(binder, methodParam);
                 }

@@ -29,9 +29,7 @@ public class MvcHandlerBinder {
     private FormattingConversionServiceFactoryBean conversionServiceBean;
 
     protected WebDataBinder createBinder(Object target, String objectName) throws Exception {
-        if (null == binder) {
-            binder = new ServletRequestDataBinder(target, objectName);
-        }
+        binder = new ServletRequestDataBinder(target, objectName);
         return binder;
     }
 
@@ -54,10 +52,9 @@ public class MvcHandlerBinder {
         if (null == conversionServiceBean) {
             conversionServiceBean = SpringContextUtil.getContext().getAutowireCapableBeanFactory().createBean(FormattingConversionServiceFactoryBean.class);
             conversionServiceBean.setConverters(dealConversion());
-        }
-        if (null != conversionServiceBean) {
             binder.setConversionService(conversionServiceBean.getObject());
         }
+
         // 绑定ValidatorAdapter用注解校验参数
         ValidatorAdapter validatorAdapter = SpringContextUtil.getContext().getBean(ValidatorAdapter.class);
         if (binder.getTarget() != null && validatorAdapter.supports(binder.getTarget().getClass())) {

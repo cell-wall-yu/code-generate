@@ -6,6 +6,7 @@ import com.chengzhi.mybaits.code_gen.plugin.LavaExample;
 import com.chengzhi.mybaits.code_gen.plugin.LavaMapper;
 import com.chengzhi.mybaits.code_gen.plugin.annotation.Table;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.generator.api.*;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.*;
@@ -30,7 +31,6 @@ public class MultiDBDoPlugin extends PluginAdapter {
     protected static String MAPPER_XML_FILE_POSTFIX = "Ext";
     protected static String MAPPER_JAVA_FILE_POSTFIX = "Ext";
     protected static String SQLMAP_COMMON_POSTFIX = "and is_deleted = 'n'";
-    protected static String ANNOTATION_RESOURCE = "javax.annotation.Resource";
 
     /**
      * 生成Do
@@ -913,8 +913,8 @@ public class MultiDBDoPlugin extends PluginAdapter {
         interfaze.setVisibility(JavaVisibility.PUBLIC);
         context.getCommentGenerator().addJavaFileComment(interfaze);
 
-        FullyQualifiedJavaType annotation = new FullyQualifiedJavaType(ANNOTATION_RESOURCE);
-        interfaze.addAnnotation("@Resource");
+        FullyQualifiedJavaType annotation = new FullyQualifiedJavaType(Mapper.class.getName());
+        interfaze.addAnnotation("@"+ Mapper.class.getSimpleName());
         interfaze.addImportedType(annotation);
 
         String tableName = introspectedTable.getTableConfiguration().getTableName();
