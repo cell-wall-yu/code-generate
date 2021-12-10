@@ -1,7 +1,17 @@
 package com.chengzhi.utils;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SecurityIDUtil {
     public static String KEY = "code-generate102";
@@ -191,7 +201,28 @@ public class SecurityIDUtil {
         return result;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        Map<String, String> methodComments = new HashMap<>();
+        String file= SecurityIDUtil.class.getResource("SecurityIDUtil.class").getFile();
+        file = file.replace("/target/classes","/src/main/java");
+        file = file.replace(".class",".java");
+        JavaParser.parse(new FileInputStream(file)).accept(new VoidVisitorAdapter<Map<String, String>>() {
+            public void visit(MethodDeclaration n, Map<String, String> arg) {
+                try {
+                    // 方法在文件中出现的顺序
+                    if (n.getComment().isPresent()) {
+                        String content = n.getComment().get().getContent();
+                        // 方法的注释
+                        System.out.println(content+n.getName());
+                        // 方法的返回类型
+                        System.out.println(n.getType().asString());
+                    }
+
+                } catch (Exception e) {
+                }
+                super.visit(n, arg);
+            }
+        }, methodComments);
         System.out.println(encryptId(1));
         System.out.println(decryptId("2aa35df4308d6147ed0abf583d02376c"));
     }
