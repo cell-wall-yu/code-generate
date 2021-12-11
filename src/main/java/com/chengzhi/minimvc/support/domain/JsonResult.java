@@ -13,6 +13,7 @@ public class JsonResult {
      * 501		后台系统异常（未捕获）
      * 601 	未登陆
      * 602 	权限异常
+     * 603 	token失效
      * </pre>
      */
     private Integer code = 0;

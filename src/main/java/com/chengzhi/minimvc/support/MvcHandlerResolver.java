@@ -9,6 +9,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebArgumentResolver;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -102,7 +104,12 @@ public class MvcHandlerResolver {
                     mvcHandlerBinder.validateIfApplicable(binder, methodParam);
                 }
                 if (binder.getBindingResult().hasErrors() && mvcHandlerBinder.isBindExceptionRequired(binder, methodParam)) {
-                    throw new BizException(binder.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
+                    StringBuffer sb = new StringBuffer();
+                    List<FieldError> errors = binder.getBindingResult().getFieldErrors();
+                    for (FieldError error : errors) {
+                        sb.append(error.getField() + " " + error.getDefaultMessage() + ",");
+                    }
+                    throw new BizException(sb.toString());
                 }
             }
         }

@@ -17,6 +17,7 @@ public abstract class LavaDto extends LavaBaseModel {
     private String modifier;
 
     public void setId(Long id) {
+        super.setId(id);
         if (id != null) {
             this.securityId = SecurityIDUtil.encryptId(id);
         }

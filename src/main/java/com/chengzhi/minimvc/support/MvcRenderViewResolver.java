@@ -3,6 +3,7 @@ package com.chengzhi.minimvc.support;
 import com.chengzhi.annotation.UserDefine;
 import com.chengzhi.exception.BizException;
 import com.chengzhi.exception.LoginTimeoutException;
+import com.chengzhi.exception.TokenExpiredException;
 import com.chengzhi.minimvc.support.domain.JsonResult;
 import com.chengzhi.utils.CommonUtil;
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ public class MvcRenderViewResolver {
     public static final int ERROR_500 = 500;
     public static final int ERROR_501 = 501;
     public static final int ERROR_601 = 601;
+    public static final int ERROR_603 = 603;
     private static final String LOG_HEAD = "[mini-mvc] response message:";
     /**
      * 日志打印相关
@@ -178,7 +180,9 @@ public class MvcRenderViewResolver {
                     errorCode = ERROR_500;
                 } else if (ex instanceof LoginTimeoutException) {
                     errorCode = ERROR_601;
-                } else {
+                } else if(ex instanceof TokenExpiredException){
+                    errorCode = ERROR_603;
+                }else {
                     errorCode = ERROR_501;
                 }
             } else {
